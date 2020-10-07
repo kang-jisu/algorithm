@@ -1,7 +1,14 @@
 /baekjoon/other
 .DS_Store
 /baekjoon/.DS_Store
-
-
+/other
 *.exe
 *.exec
+*.dSYM
+*.dll
+*.exe
+*.o
+*.so
+*.com
+*.class
+*.log 
