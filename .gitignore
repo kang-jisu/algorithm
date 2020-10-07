@@ -1,1 +1,6 @@
 /baekjoon/other
+.DS_Store
+/baekjoon/.DS_Store
+
+
+*.exe
