@@ -24,7 +24,9 @@
         "list": "cpp",
         "set": "cpp",
         "stack": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

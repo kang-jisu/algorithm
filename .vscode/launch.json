@@ -4,18 +4,17 @@
   // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
   "version": "0.2.0",
   "configurations": [
-    {
-      "name": "(lldb) Launch",
-      "type": "cppdbg",
-      "request": "launch",
-      // "program": "${fileDirname}/${fileBasenameNoExtension}",
-      "program": "${workspaceFolder}/baekjoon/other/newmst",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": true,
-      "MIMode": "lldb"
-    }
+      {
+          "name": "(lldb) Launch",
+          "type": "cppdbg",
+          "request": "launch",
+          "program": "${fileDirname}/${fileBasenameNoExtension}",
+          "args": [],
+          "stopAtEntry": false,
+          "cwd": "${workspaceFolder}",
+          "environment": [],
+          "externalConsole": true,
+          "MIMode": "lldb"
+      }
   ]
 }
