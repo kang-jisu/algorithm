@@ -9,9 +9,23 @@ public class Tornado {
 
     static int N;
     static int[][] map;
-    static int dx[] ={0,1, 0, -1};
-    static int dy[]= {-1,0,1,0};
+    static int dx[] ={0,1,0,-1};
+    static int dy[]= {-1, 0,1,0 };
     static int over;
+    static double[] p = new double[]{0.05, 0.1, 0.1, 0.02, 0.02, 0.07, 0.07, 0.01, 0.01};
+
+    static int[][] px = new int[][] {
+            {0,-1,1, -2,2,-1,1,-1,1,0},
+            {2,1,1,0,0,0,0,-1,-1,1},
+            {0,-1,1, -2,2,-1,1,-1,1,0},
+            {-2,-1,-1,0,0,0,0,1,1,-1}
+    };
+    static int[][] py = new int[][] {
+            {-2,-1,-1,0,0,0,0,1,1,-1},
+            {0,-1,1, -2,2,-1,1,-1,1,0},
+            {2,1,1,0,0,0,0,-1,-1,1},
+            {0,-1,1, -2,2,-1,1,-1,1,0}
+    };
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,24 +42,21 @@ public class Tornado {
         int x = N/2;
         int y= N/2;
         int len = 1;
-        int cnt = 0;
         int d=0;
         over= 0;
         while(true) {
             for(int i=0; i<2; i++) {
                 for(int j=0; j<len; j++) {
-                    move(x,y,d);
-                    map[x][y]=0;
-
                     x = x + dx[d];
                     y = y + dy[d];
-                    if(x==0 && y==-1) break;
+                    move(x,y,d);
+                    if(x==0 && y==0) break;
                 }
                 d = (d+1)%4;
-                if(x==0 && y==-1) break;
+                if(x==0 && y==0) break;
             }
             len++;
-            if(x==0 && y==-1) break;
+            if(x==0 && y==0) break;
         }
         System.out.println(over);
     }
@@ -55,96 +66,29 @@ public class Tornado {
         int B = y;
         int amount = map[A][B];
         int remain = amount;
-        // 5
-        A = x+dx[d]*3;
-        B = y+dy[d]*3;
-        remain -= (amount*5)/100;
-        if(A>=0 && A<N && B>=0 && B<N) {
-            map[A][B] += (amount*5)/100;
-        }
-        else over += (amount*5)/100;
+        for(int i=0; i<9; i++){
+            int Px = A + px[d][i];
+            int Py = B + py[d][i];
 
-        A = x+dx[d]*2;
-        B = y+dy[d]*2;
-        // 10
-        int A1 =  A+dx[(d+1)%4];
-        int B1 = B+dy[(d+1)%4];
-        remain -= (amount*10)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] += (amount*10)/100;
+            int sand = (int) (map[A][B]*p[i]);
+            remain -= sand;
+            if( Px>=0 && Px<N && Py>=0 && Py<N) {
+                map[Px][Py] += sand;
+            }
+            else over += sand;
         }
-        else over += (amount*10)/100;
-
-        A1 =  A+dx[(d+3)%4];
-        B1 = B+dy[(d+3)%4];
-        remain -= (amount*10)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] += (amount*10)/100;
-        }
-        else over += (amount*10)/100;
-        // 7
-        A = x+dx[d];
-        B = y+dy[d];
-        A1 =  A+dx[(d+1)%4];
-        B1 = B+dy[(d+1)%4];
-        remain -= (amount*7)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] +=  (amount*7)/100;
-        }
-        else over +=(amount*7)/100;
-        A1 =  A+dx[(d+1)%4]*2;
-        B1 = B+dy[(d+1)%4]*2;
-
-        remain -= (amount*2)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] +=(amount*2)/100;
-        }
-        else over +=  (amount*2)/100;
-        A1 =  A+dx[(d+3)%4];
-        B1 = B+dy[(d+3)%4];
-
-        remain -= (amount*7)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] += (amount*7)/100;
-        }
-        else over += (amount*7)/100;
-        A1 =  A+dx[(d+3)%4]*2;
-        B1 = B+dy[(d+3)%4]*2;
-
-        remain -= (amount*2)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] +=(amount*2)/100;
-        }
-        else over += (amount*2)/100;
-        // 1
-        A1 =  x+dx[(d+1)%4];
-        B1 = y+dy[(d+1)%4];
-        remain -= (amount*1)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] += (amount*1)/100;
-        }
-        else over += (amount*1)/100;
-
-        A1 =  x+dx[(d+3)%4];
-        B1 = y+dy[(d+3)%4];
-        remain -= (amount*1)/100;
-        if(A1>=0 && A1<N && B1>=0 && B1<N) {
-            map[A1][B1] +=  (amount*1)/100;
-        }
-        else over +=  (amount*1)/100;
-
-        // a
-        A = x+dx[d]*2;
-        B = y+dy[d]*2;
-        if(A>=0 && A<N && B>=0 && B<N) {
-            map[A][B] += remain;
+        int Px = A + px[d][9];
+        int Py = B + py[d][9];
+        if( Px>=0 && Px<N && Py>=0 && Py<N) {
+            map[Px][Py] += remain;
         }
         else over += remain;
-
 
     }
 
 }
-
-
-/* 푸는중 */
+/*
+백준  20057 마법사상어와토네이도
+이거풀어서 입사한건데 . . . 틀려버렸다 . . 
+미리 Px, Py, P 이용해서 곱할 곳에 대한 배열 만들어주고 계산하니까 코드 복잡하게 안하고 풀 수 있었다.
+*/
