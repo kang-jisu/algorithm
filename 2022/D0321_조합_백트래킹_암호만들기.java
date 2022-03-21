@@ -1,5 +1,7 @@
 /*
-아직 푸는중 ㅠ_ㅠ 
+백준 1759 암호만들기 
+2초라서 진짜그냥 정렬하고 조합해서 체크함녀되는데 괜히 복잡하게 생각했다.. 
+https://www.acmicpc.net/problem/1759
 */
 package com.company;
 
@@ -13,12 +15,8 @@ import java.util.StringTokenizer;
 public class MakeSecret {
 
     static int L, C;
-    static ArrayList<Character> vowels;
-    static ArrayList<Character> consonants;
     static ArrayList<Character> alls;
     static boolean[] alphabets;
-    static boolean[] visitv;
-    static boolean[] visitc;
     static ArrayList<Character> result;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,9 +24,6 @@ public class MakeSecret {
         L = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
 
-
-        vowels = new ArrayList<>();
-        consonants = new ArrayList<>();
         alls = new ArrayList<>();
         result = new ArrayList<>();
         alphabets = new boolean[26];
@@ -36,94 +31,46 @@ public class MakeSecret {
         st = new StringTokenizer(br.readLine());
         for(int i=0; i<C; i++){
             char ch = st.nextToken().charAt(0);
-            if(ch == 'a' || ch == 'e'|| ch == 'i'|| ch == 'o'|| ch == 'u') {
-                vowels.add(ch);
-            }
-            else consonants.add(ch);
             alls.add(ch);
         }
-        Collections.sort(vowels);
-        Collections.sort(consonants);
-        visitv = new boolean[vowels.size()];
-        visitc = new boolean[consonants.size()];
-
-        for(int i=0; i<vowels.size(); i++){
-            result.add(vowels.get(i));
-            alphabets[vowels.get(i)-'a']=true;
-            visitv[i]=true;
-            con(0);
-            result.remove(result.size()-1);
-            alphabets[vowels.get(i)-'a']=false;
-            visitv[i]=false;
-        }
+        Collections.sort(alls);
+        permutation(0,0, new ArrayList<Character>());
     }
 
-    public static void con(int cnt){
-        if(cnt==2){
-            permutation(3, 0);
-        }
-        for(int i=0; i<consonants.size(); i++){
-            if(visitc[i]==false && alphabets[consonants.get(i)-'a'] ==false) {
-                visitc[i]=true;
-                alphabets[consonants.get(i)-'a']=true;
-                result.add(consonants.get(i));
-                con(cnt+1);
-                alphabets[consonants.get(i)-'a']=false;
-                result.remove(result.size()-1);
-                visitc[i]=false;
+    public static void permutation( int cnt,int idx, ArrayList<Character> list){
+        if( list.size()==L) {
+            if(check(list)) {
+                for (int i = 0; i < list.size(); i++) {
+                    System.out.print(list.get(i) );
+                }
+                System.out.println();
             }
-        }
-    }
-
-    public static void permutation( int cnt,int idx){
-        if( result.size()==L) {
-            Collections.sort(result);
-            for (int i = 0; i < result.size(); i++) {
-                System.out.print(result.get(i)+" ");
-            }
-            System.out.println();
             return;
         }
-        for(int i=0; i<alls.size(); i++){
-            if(alphabets[alls.get(i)-'a']==false ){
+        for(int i=idx; i<alls.size(); i++){
+            if(alphabets[alls.get(i)-'a']==false ) {
+                if(!list.isEmpty() && list.get(list.size()-1)>alls.get(i)) continue;
+                for (int j = 0; j < result.size(); j++) {
+                    list.add(result.get(j));
+                }
+                list.add(alls.get(i));
                 alphabets[alls.get(i)-'a']=true;
-                result.add(alls.get(i));
-                permutation(cnt+1,idx+1);
-                result.remove(result.size()-1);
+                permutation(cnt + 1, idx + 1, list);
+                list.remove(list.size() - 1);
                 alphabets[alls.get(i)-'a']=false;
             }
         }
     }
-//    public static void permutation(int v, int c, int cnt,int idx){
-//        if( result.size()==L) {
-//            Collections.sort(result);
-//            for (int i = 0; i < result.size(); i++) {
-//                System.out.print(result.get(i)+" ");
-//            }
-//            System.out.println();
-//            return;
-//        }
-//        if(c<2) {
-//            for(int i=c; i<consonants.size(); i++){
-//                if(visitc[i]==false ) {
-//                    visitc[i]=true;
-//                    alphabets[consonants.get(i)-'a']=true;
-//                    result.add(consonants.get(i));
-//                    permutation(v, c+1, cnt+1,idx);
-//                    alphabets[consonants.get(i)-'a']=false;
-//                    result.remove(result.size()-1);
-//                    visitc[i]=false;
-//                }
-//            }
-//        }
-//        for(int i=idx; i<alls.size(); i++){
-//            if(alphabets[alls.get(i)-'a']==false ){
-//                alphabets[alls.get(i)-'a']=true;
-//                result.add(alls.get(i));
-//                permutation(v,c,cnt+1,idx+1);
-//                result.remove(result.size()-1);
-//                alphabets[alls.get(i)-'a']=false;
-//            }
-//        }
-//    }
+    public static boolean check(ArrayList<Character> list) {
+
+        int vowels=0;
+        int con=0;
+        for(int i=0; i<list.size(); i++){
+            if(list.get(i)=='a' ||list.get(i)=='e' ||list.get(i)=='i' ||list.get(i)=='o' ||list.get(i)=='u' )vowels++;
+            else con++;
+        }
+        if(vowels>=1 && con>=2) return true;
+        else return false;
+    }
 }
+
